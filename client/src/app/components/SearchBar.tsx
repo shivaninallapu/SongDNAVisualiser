@@ -38,7 +38,7 @@ export default function SearchBar({ onSelect }: Props) {
   }, [timer]);
 
   return (
-    <div className="relative w-full max-w-xl">
+    <div className="relative w-full max-w-xl" style={{ zIndex: 100 }}>
       <input
         type="text"
         value={query}
@@ -50,7 +50,7 @@ export default function SearchBar({ onSelect }: Props) {
         <div className="absolute right-4 top-3.5 text-white/50 text-sm">searching...</div>
       )}
       {results.length > 0 && (
-        <div className="absolute top-14 left-0 right-0 bg-gray-900 border border-white/10 rounded-2xl overflow-hidden z-50 shadow-2xl">
+        <div className="absolute top-14 left-0 right-0 bg-gray-900 border border-white/10 rounded-2xl overflow-hidden shadow-2xl" style={{ zIndex: 200 }}>
           {results.map((track) => (
             <button
               key={track.id}

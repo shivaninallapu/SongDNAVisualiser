@@ -12,3 +12,14 @@ class User(Base):
     access_token = Column(String)
     refresh_token = Column(String)
     created_at = Column(DateTime, server_default=func.now())
+class SavedDna(Base):
+    __tablename__ = "saved_dnas"
+
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    user_id = Column(String, nullable=False)
+    track_id = Column(String, nullable=False)
+    track_name = Column(String)
+    artist = Column(String)
+    image = Column(String)
+    features = Column(String)  
+    created_at = Column(DateTime, server_default=func.now())

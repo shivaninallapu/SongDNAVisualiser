@@ -22,3 +22,30 @@ export async function getSimilarTracks(trackId: string) {
   });
   return res.data;
 }
+
+export async function saveDna(payload: {
+  track_id: string;
+  track_name: string;
+  artist: string;
+  image: string;
+  features: Record<string, number>;
+}) {
+  const res = await axios.post("/api/saved/", {
+    spotify_id: SPOTIFY_ID,
+    ...payload,
+  });
+  return res.data;
+}
+
+export async function getSaved() {
+  const res = await axios.get("/api/saved/", {
+    params: { spotify_id: SPOTIFY_ID },
+  });
+  return res.data.saved;
+}
+export async function getPersonality() {
+  const res = await axios.get("/api/personality/", {
+    params: { spotify_id: SPOTIFY_ID },
+  });
+  return res.data;
+}
