@@ -15,7 +15,7 @@ class SaveRequest(BaseModel):
     image: str
     features: dict
 
-@router.post("/")
+@router.post("")
 def save_dna(body: SaveRequest, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.spotify_id == body.spotify_id).first()
     if not user:
@@ -42,7 +42,7 @@ def save_dna(body: SaveRequest, db: Session = Depends(get_db)):
     db.commit()
     return {"message": "Saved", "id": saved.id}
 
-@router.get("/")
+@router.get("")
 def get_saved(spotify_id: str, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.spotify_id == spotify_id).first()
     if not user:
