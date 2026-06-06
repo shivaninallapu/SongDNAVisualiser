@@ -49,3 +49,15 @@ export async function getPersonality() {
   });
   return res.data;
 }
+
+export async function generateWrap() {
+  const res = await axios.post(`/api/wrap/generate`, null, {
+    params: { spotify_id: SPOTIFY_ID },
+  });
+  return res.data;
+}
+
+export async function getWrap(wrapId: string) {
+  const res = await axios.get(`/api/wrap/${wrapId}`);
+  return res.data;
+}

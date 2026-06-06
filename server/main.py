@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from database import Base, engine
-import auth, dna, saved, personality
+import auth, dna, saved, personality, wrap
 
 Base.metadata.create_all(bind=engine)
 
@@ -22,6 +22,7 @@ app.include_router(auth.router)
 app.include_router(dna.router)
 app.include_router(saved.router)
 app.include_router(personality.router)
+app.include_router(wrap.router)
 
 @app.get("/")
 def root():

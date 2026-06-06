@@ -4,7 +4,8 @@ import SearchBar from "./components/SearchBar";
 import DnaHelix from "./components/DnaHelix";
 import DnaRadar from "./components/RadarChart";
 import PersonalityCard from "./components/PersonalityCard";
-import { getTrackDna, getSimilarTracks, saveDna, getSaved, getPersonality } from "./lib/api";
+import { getTrackDna, getSimilarTracks, saveDna, getSaved, getPersonality, generateWrap, getWrap } from "./lib/api";
+import WrapCard from "./components/WrapCard";
 
 interface Track {
   id: string;
@@ -22,7 +23,7 @@ interface Similar {
   similarity: number;
 }
 
-type Panel = "home" | "visualizer" | "collection" | "personality";
+type Panel = "home" | "visualizer" | "collection" | "personality" | "wrap";
 
 export default function Home() {
   const [track, setTrack] = useState<Track | null>(null);
@@ -37,6 +38,8 @@ export default function Home() {
   const [saved, setSaved] = useState(false);
   const [personality, setPersonality] = useState<any>(null);
   const [personalityLoading, setPersonalityLoading] = useState(false);
+  const [wrapData, setWrapData] = useState<any>(null);
+  const [wrapLoading, setWrapLoading] = useState(false);
 
   const handleSelect = async (t: Track) => {
     setTrack(t);
@@ -79,7 +82,19 @@ export default function Home() {
     });
     setSaved(true);
   };
-
+  const handleWrap = async () => {
+    setPanel("wrap");
+    if (wrapData) return;
+    setWrapLoading(true);
+    try {
+      const data = await generateWrap();
+      setWrapData(data);
+    } catch (e) {
+      console.error("Wrap failed:", e);
+    } finally {
+      setWrapLoading(false);
+    }
+  };
   const handleLoadCollection = async () => {
     const items = await getSaved();
     setSavedList(items);
@@ -124,6 +139,12 @@ export default function Home() {
             className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${panel === "personality" ? "bg-purple-500 text-white" : "bg-white/10 hover:bg-white/20 text-white/70"}`}
           >
             My Personality
+          </button>
+          <button
+            onClick={handleWrap}
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${panel === "wrap" ? "bg-purple-500 text-white" : "bg-white/10 hover:bg-white/20 text-white/70"}`}
+          >
+            DNA Wrap
           </button>
           <button
             onClick={handleLoadCollection}
@@ -185,6 +206,34 @@ export default function Home() {
                 <p className="text-white/50 text-sm">Save and revisit the DNA fingerprints of your favorite songs.</p>
               </div>
             </div>
+          </div>
+        )}
+
+        {/* WRAP PANEL */}
+        {panel === "wrap" && (
+          <div>
+            <div className="flex items-center gap-4 mb-8">
+              <button
+                onClick={() => setPanel("home")}
+                className="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white/70 text-sm transition-colors"
+              >
+                Back
+              </button>
+              <h2 className="text-xl font-semibold">Your DNA Wrap</h2>
+            </div>
+            {wrapLoading ? (
+              <div className="text-center py-20">
+                <div className="text-white/50 text-lg animate-pulse">Generating your DNA Wrap...</div>
+                <div className="text-white/30 text-sm mt-2">Analyzing your top tracks and collection</div>
+              </div>
+            ) : wrapData ? (
+              <WrapCard
+                data={wrapData}
+                shareUrl={`${window.location.origin}/wrap/${wrapData.wrap_id}`}
+              />
+            ) : (
+              <div className="text-center text-white/30 py-20">Failed to generate wrap</div>
+            )}
           </div>
         )}
 
