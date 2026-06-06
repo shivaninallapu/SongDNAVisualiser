@@ -2,7 +2,7 @@
 
 > Decode the genetic fingerprint of any song. Discover what makes music unique.
 
-**Live Demo:** https://song-dna-visualiser-2-fqzrg92ok-shivani-nallapu-s-projects.vercel.app
+**Live Demo:** https://song-dna-visualiser-2.vercel.app/
 
 ---
 
